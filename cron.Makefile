@@ -5,8 +5,6 @@ CXXFLAGS += $(DEFS)
 
 TARGET = cron_mdp
 
-# CSRCS =
-
 CXXSRCS = \
 	../mdp/Client.cpp \
 	../mdp/MutualHeartbeatMonitor.cpp \
@@ -19,3 +17,7 @@ CXXSRCS = \
 	fs.cpp
 
 include Makefile.rules
+
+clean:
+	cd ../mdp && make clean
+	rm *.o *.elf -f

@@ -1,6 +1,5 @@
-all: scheduler.Makefile
-	make -f scheduler.Makefile
+all: cron.Makefile
+	make -f cron.Makefile
 
-clean:
-	rm *.o -f
-	rm *.elf -f
+clean: cron.Makefile
+	make -f cron.Makefile clean
