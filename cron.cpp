@@ -24,7 +24,7 @@ int main(int argc, char *const argv[])
     std::string brokerAddress;
     std::string path;
 
-    for(char c; -1 != (c = ::getopt(argc, argv, "ha:p:"));)
+    for(int c; -1 != (c = ::getopt(argc, argv, "ha:p:"));)
     {
         switch(c)
         {
