@@ -129,14 +129,21 @@ void Cron::update(const Monitor::EventSeq &eventSeq)
     }
 }
 
-void Cron::dispatch(std::chrono::system_clock::time_point now)
+void Cron::dispatch(std::chrono::system_clock::time_point at)
 {
     for(const auto &jobSeq : jobSeqMap_)
     {
         for(const auto &job : jobSeq.second)
         {
-            if(job.expired(now)) dispatch(job);
+            if(job.expired(at)) dispatch(job);
         }
+    }
+
+    const auto delta = std::chrono::system_clock::now() - at;
+
+    if(std::chrono::milliseconds{1000} > delta)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds{1000} - delta);
     }
 }
 
@@ -146,12 +153,8 @@ void Cron::dispatch(const Job &job)
 
     Client client;
 
-    std::vector<std::string> requestPayload;
-
-    for(const auto &i : job.payload()) requestPayload.emplace_back(i.dump());
-
     const auto replyPayload =
-        client.exec(brokerAddr_, job.service(), requestPayload);
+        client.exec(brokerAddr_, job.service(), {job.payload().dump()});
 
     ENSURE(2 == int(replyPayload.size()), RuntimeError);
     ENSURE(MDP::Broker::Signature::statusSucess == replyPayload[0], RuntimeError);
