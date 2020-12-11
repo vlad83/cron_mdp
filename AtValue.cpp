@@ -95,9 +95,11 @@ std::ostream &operator<<(std::ostream &os, const AtValue &atValue)
 
     const auto dumpSeq = [&os](const AtValue::Seq &seq)
     {
-        os << '[';
-        for(auto i : seq) os << i << ' ';
-        os << ']';
+        for(auto begin = std::begin(seq); std::end(seq) != begin; ++begin)
+        {
+            os << *begin;
+            if(std::next(begin) != std::end(seq)) os << ',';
+        }
     };
 
     os << "s";

@@ -101,7 +101,7 @@ void Cron::update(const std::string &path)
     for(const auto &i : input)
     {
         seq.push_back(parseJob(path, i));
-        LOG(TraceLevel::Debug, seq.back());
+        LOG(TraceLevel::Info, path, ' ', seq.back());
     }
 
     if(!seq.empty()) jobSeqMap_[path] = seq;
@@ -149,7 +149,7 @@ void Cron::dispatch(std::chrono::system_clock::time_point at)
 
 void Cron::dispatch(const Job &job)
 {
-    TRACE(TraceLevel::Debug, "job ", job);
+    TRACE(TraceLevel::Info, "job ", job);
 
     Client client;
 
